@@ -1,14 +1,22 @@
 {
-  "name": "@upgrad/react-native-brightcove-player",
-  "version": "0.1.8",
+  "name": "@praveen.ppass/react-native-brightcove-player",
+  "version": "1.0.0",
   "description": "A React Native wrapper for the Brightcove Player SDK with core video playback functionality",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/praveenppass/react-native-brightcove-player.git"
+  },
+  "homepage": "https://github.com/praveenppass/react-native-brightcove-player#readme",
+  "bugs": {
+    "url": "https://github.com/praveenppass/react-native-brightcove-player/issues"
+  },
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
     "test": "jest",
-    "publish": "npm publish --registry https://verdaccio.upgrad.dev/"
+    "publish": "npm publish --access=public"
   },
   "keywords": [
     "react-native",
@@ -20,10 +28,6 @@
   ],
   "author": "Praveen Kumar Tripathi",
   "license": "MIT",
-  "publishConfig": {
-    "registry": "https://verdaccio.upgrad.dev/",
-    "access": "public"
-  },
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-native": ">=0.70.0"

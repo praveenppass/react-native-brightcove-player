@@ -12,8 +12,8 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 # Add Brightcove repository with credentials
 source 'https://repo.brightcove.com/releases' do |source|
-  source.username = 'praveen.tripathi@upgrad.com'
-  source.password = 'brightcove-ugLearn'
+  source.username = ENV['BRIGHTCOVE_USERNAME']
+  source.password = ENV['BRIGHTCOVE_PASSWORD']
 end
 
 target 'BrightcovePlayer' do

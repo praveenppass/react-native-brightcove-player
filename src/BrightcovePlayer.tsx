@@ -12,10 +12,17 @@ interface Caption {
   label: string;
 }
 
+interface PlaylistItem {
+  videoId: string;
+  title?: string;
+  thumbnail?: string;
+}
+
 interface BrightcovePlayerProps {
   accountId: string;
   videoId: string;
   policyKey: string;
+  playlist?: PlaylistItem[];
   onError?: (error: Error | unknown) => void;
   onPlay?: () => void;
   onPause?: () => void;
@@ -27,6 +34,11 @@ interface BrightcovePlayerProps {
   onAvailableQualities?: (qualities: Quality[]) => void;
   onAvailableCaptions?: (captions: Caption[]) => void;
   onLanguageChange?: (language: string) => void;
+  onPlaylistChange?: (playlist: PlaylistItem[]) => void;
+  onVideoChange?: (videoId: string) => void;
+  onSeek?: (time: number) => void;
+  onSeekForward?: (time: number) => void;
+  onSeekBackward?: (time: number) => void;
   autoPlay?: boolean;
   initialLanguage?: string;
   initialQuality?: string;
@@ -34,6 +46,10 @@ interface BrightcovePlayerProps {
   captionsEnabled?: boolean;
   captionsLanguage?: string;
   showControls?: boolean;
+  seekInterval?: number;
+  enableBackgroundPlayback?: boolean;
+  enablePictureInPicture?: boolean;
+  enableOfflinePlayback?: boolean;
 }
 
 interface BufferingEvent {
@@ -44,6 +60,7 @@ const BrightcovePlayer: React.FC<BrightcovePlayerProps> = ({
   accountId,
   videoId,
   policyKey,
+  playlist,
   onError,
   onPlay,
   onPause,
@@ -55,6 +72,11 @@ const BrightcovePlayer: React.FC<BrightcovePlayerProps> = ({
   onAvailableQualities,
   onAvailableCaptions,
   onLanguageChange,
+  onPlaylistChange,
+  onVideoChange,
+  onSeek,
+  onSeekForward,
+  onSeekBackward,
   autoPlay = false,
   initialLanguage = 'en',
   initialQuality,
@@ -62,6 +84,10 @@ const BrightcovePlayer: React.FC<BrightcovePlayerProps> = ({
   captionsEnabled = true,
   captionsLanguage = 'en',
   showControls = true,
+  seekInterval = 10,
+  enableBackgroundPlayback = false,
+  enablePictureInPicture = false,
+  enableOfflinePlayback = false,
 }) => {
   const playerRef = useRef<any>(null);
   const eventEmitterRef = useRef<NativeEventEmitter | null>(null);
@@ -83,8 +109,24 @@ const BrightcovePlayer: React.FC<BrightcovePlayerProps> = ({
         playerRef.current = NativeModules.BrightcovePlayer;
       }
       
-      // Initialize player with credentials
-      await playerRef.current.initialize(accountId, videoId, policyKey, autoPlay, initialLanguage);
+      // Initialize player with credentials and features
+      await playerRef.current.initialize({
+        accountId,
+        videoId,
+        policyKey,
+        autoPlay,
+        initialLanguage,
+        initialQuality,
+        autoQuality,
+        captionsEnabled,
+        captionsLanguage,
+        showControls,
+        seekInterval,
+        enableBackgroundPlayback,
+        enablePictureInPicture,
+        enableOfflinePlayback,
+        playlist,
+      });
     } catch (error) {
       onError?.(error);
     }
@@ -144,6 +186,29 @@ const BrightcovePlayer: React.FC<BrightcovePlayerProps> = ({
     eventEmitterRef.current.addListener('onLanguageChange', (event: { language: string }) => {
       onLanguageChange?.(event.language);
     });
+
+    // Playlist events
+    eventEmitterRef.current.addListener('onPlaylistChange', (event: { playlist: PlaylistItem[] }) => {
+      onPlaylistChange?.(event.playlist);
+    });
+
+    // Video change events
+    eventEmitterRef.current.addListener('onVideoChange', (event: { videoId: string }) => {
+      onVideoChange?.(event.videoId);
+    });
+
+    // Seek events
+    eventEmitterRef.current.addListener('onSeek', (event: { time: number }) => {
+      onSeek?.(event.time);
+    });
+
+    eventEmitterRef.current.addListener('onSeekForward', (event: { time: number }) => {
+      onSeekForward?.(event.time);
+    });
+
+    eventEmitterRef.current.addListener('onSeekBackward', (event: { time: number }) => {
+      onSeekBackward?.(event.time);
+    });
   };
 
   const cleanup = () => {
@@ -157,12 +222,24 @@ const BrightcovePlayer: React.FC<BrightcovePlayerProps> = ({
     play: () => playerRef.current?.play(viewRef.current),
     pause: () => playerRef.current?.pause(viewRef.current),
     seekTo: (time: number) => playerRef.current?.seekTo(viewRef.current, time),
+    seekForward: (seconds: number = seekInterval) => playerRef.current?.seekForward(viewRef.current, seconds),
+    seekBackward: (seconds: number = seekInterval) => playerRef.current?.seekBackward(viewRef.current, seconds),
     setVolume: (volume: number) => playerRef.current?.setVolume(viewRef.current, volume),
     getAvailableQualities: () => playerRef.current?.getAvailableQualities(viewRef.current),
     getCurrentQuality: () => playerRef.current?.getCurrentQuality(viewRef.current),
+    setQuality: (quality: string) => playerRef.current?.setQuality(viewRef.current, quality),
     getAvailableCaptions: () => playerRef.current?.getAvailableCaptions(viewRef.current),
     getCurrentTime: () => playerRef.current?.getCurrentTime(viewRef.current),
     getDuration: () => playerRef.current?.getDuration(viewRef.current),
+    playNext: () => playerRef.current?.playNext(viewRef.current),
+    playPrevious: () => playerRef.current?.playPrevious(viewRef.current),
+    getPlaylist: () => playerRef.current?.getPlaylist(viewRef.current),
+    setPlaylist: (playlist: PlaylistItem[]) => playerRef.current?.setPlaylist(viewRef.current, playlist),
+    enterPictureInPicture: () => playerRef.current?.enterPictureInPicture(viewRef.current),
+    exitPictureInPicture: () => playerRef.current?.exitPictureInPicture(viewRef.current),
+    downloadVideo: () => playerRef.current?.downloadVideo(viewRef.current),
+    getDownloadedVideos: () => playerRef.current?.getDownloadedVideos(viewRef.current),
+    deleteDownloadedVideo: (videoId: string) => playerRef.current?.deleteDownloadedVideo(viewRef.current, videoId),
   }));
 
   return (
