@@ -9,61 +9,7 @@ buildscript {
         exoplayerVersion = "2.18.7"
         brightcoveVersion = "10.0.1"
     }
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://repo1.maven.org/maven2/" }
-        maven { url "https://maven.google.com" }
-        maven { url "https://jitpack.io" }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-account"
-          credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-         }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-catalog"
-          credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-media"
-          credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-ui"
-          credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-         }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-util" 
-          credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-exoplayer"
-          credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-         }
-        maven {
-            url 'https://repo.brightcove.com/releases'
-            credentials {
-                username = project.findProperty("brightcove.user") ?: ""
-                password = project.findProperty("brightcove.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-    }
+  
     dependencies {
         classpath("com.android.tools.build:gradle:7.4.2")
         classpath("com.facebook.react:react-native-gradle-plugin")
@@ -71,65 +17,7 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://repo1.maven.org/maven2/" }
-        maven { url "https://maven.google.com" }
-        maven { url "https://jitpack.io" }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-account" 
-           credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-catalog" 
-           credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-media" 
-           credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-ui" 
-           credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-util" 
-           credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-        maven { url "https://maven.pkg.github.com/BrightcoveOS/android-player-sdk-exoplayer" 
-           credentials {
-                username = project.findProperty("github.user") ?: ""
-                password = project.findProperty("github.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-        maven {
-            url 'https://repo.brightcove.com/releases'
-            credentials {
-                username = project.findProperty("brightcove.user") ?: ""
-                password = project.findProperty("brightcove.password") ?: ""
-            }
-            allowInsecureProtocol = true
-        }
-    }
-}
+
 
 apply plugin: 'com.android.library'
 apply plugin: 'com.facebook.react'
@@ -163,7 +51,7 @@ dependencies {
     
     // Brightcove Player SDK
     implementation "com.brightcove.player:android-sdk:$brightcoveVersion"
-    implementation "com.brightcove.player:exoplayer:$brightcoveVersion"
+    implementation "com.brightcove.player:exoplayer2:$brightcoveVersion"
     implementation "com.brightcove.player:android-sdk-account:$brightcoveVersion"
     implementation "com.brightcove.player:android-sdk-catalog:$brightcoveVersion"
     implementation "com.brightcove.player:android-sdk-media:$brightcoveVersion"
@@ -171,9 +59,9 @@ dependencies {
     implementation "com.brightcove.player:android-sdk-util:$brightcoveVersion"
     
     // ExoPlayer dependencies
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoplayerVersion"
+    implementation "com.google.android.exoplayer2:exoplayer-core:$exoplayerVersion"
+    implementation "com.google.android.exoplayer2:exoplayer-ui:$exoplayerVersion"
+    implementation "com.google.android.exoplayer2:exoplayer-dash:$exoplayerVersion"
+    implementation "com.google.android.exoplayer2:exoplayer-hls:$exoplayerVersion"
+    implementation "com.google.android.exoplayer2:exoplayer-smoothstreaming:$exoplayerVersion"
 } 

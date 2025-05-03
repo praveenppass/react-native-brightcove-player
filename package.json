@@ -1,6 +1,6 @@
 {
   "name": "@praveen.ppass/react-native-brightcove-player",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A React Native wrapper for the Brightcove Player SDK with core video playback functionality",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
